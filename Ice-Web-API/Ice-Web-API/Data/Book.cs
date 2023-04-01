@@ -12,5 +12,6 @@ namespace Ice_Web_API.Data
         public string? Title { get; set; }
         [Range(0, double.MaxValue)]
         public int Price { get; set; }
+
     }
 }
