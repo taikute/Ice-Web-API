@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Ice_Web_API.Data
+namespace Ice_Web_API.Models
 {
-    [Table("Book")]
-    public class Book
+    public class BookModel
     {
-        [Key]
         public int Id { get; set; }
         [MaxLength(100)]
         public string? Title { get; set; }
