@@ -1,6 +1,7 @@
 ﻿using Ice_Web_MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace Ice_Web_MVC.Controllers
 {
@@ -14,16 +15,44 @@ namespace Ice_Web_MVC.Controllers
             client.BaseAddress = baseAddress;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<BookViewModel>? books = new List<BookViewModel>();
-            HttpResponseMessage response = client.GetAsync(client.BaseAddress + "/book").Result;
+            HttpResponseMessage response = await client.GetAsync(client.BaseAddress + "/book");
             if (response.IsSuccessStatusCode)
             {
-                string data = response.Content.ReadAsStringAsync().Result;
-                books = JsonConvert.DeserializeObject<List<BookViewModel>>(data);
+                string data = await response.Content.ReadAsStringAsync();
+                var books = JsonConvert.DeserializeObject<List<BookViewModel>>(data);
+                return View(books);
             }
-            return View(books);
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        public IActionResult Create()
+        {
+            return View(new BookViewModel());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(BookViewModel bookViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var content = new StringContent(JsonConvert.SerializeObject(bookViewModel), Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(client.BaseAddress + "/book", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            return View(bookViewModel);
         }
     }
 }
