@@ -17,7 +17,7 @@ namespace Ice_Web_MVC.Controllers
         public IActionResult Index()
         {
             List<BookViewModel>? books = new List<BookViewModel>();
-            HttpResponseMessage response = client.GetAsync(client.BaseAddress + "/books").Result;
+            HttpResponseMessage response = client.GetAsync(client.BaseAddress + "/book").Result;
             if (response.IsSuccessStatusCode)
             {
                 string data = response.Content.ReadAsStringAsync().Result;

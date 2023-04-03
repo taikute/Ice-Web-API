@@ -11,34 +11,34 @@ namespace Ice_Web_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BooksController : ControllerBase
+    public class BookController : ControllerBase
     {
         private readonly WebDbContext _context;
 
-        public BooksController(WebDbContext context)
+        public BookController(WebDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Books
+        // GET: api/Book
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
         {
-            if (_context.Books == null)
-            {
-                return NotFound();
-            }
+          if (_context.Books == null)
+          {
+              return NotFound();
+          }
             return await _context.Books.ToListAsync();
         }
 
-        // GET: api/Books/5
+        // GET: api/Book/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Book>> GetBook(int id)
         {
-            if (_context.Books == null)
-            {
-                return NotFound();
-            }
+          if (_context.Books == null)
+          {
+              return NotFound();
+          }
             var book = await _context.Books.FindAsync(id);
 
             if (book == null)
@@ -49,7 +49,7 @@ namespace Ice_Web_API.Controllers
             return book;
         }
 
-        // PUT: api/Books/5
+        // PUT: api/Book/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBook(int id, Book book)
@@ -80,22 +80,22 @@ namespace Ice_Web_API.Controllers
             return NoContent();
         }
 
-        // POST: api/Books
+        // POST: api/Book
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Book>> PostBook(Book book)
         {
-            if (_context.Books == null)
-            {
-                return Problem("Entity set 'WebDbContext.Books'  is null.");
-            }
+          if (_context.Books == null)
+          {
+              return Problem("Entity set 'WebDbContext.Books'  is null.");
+          }
             _context.Books.Add(book);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetBook", new { id = book.Id }, book);
         }
 
-        // DELETE: api/Books/5
+        // DELETE: api/Book/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBook(int id)
         {
